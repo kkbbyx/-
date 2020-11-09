@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>手写数字识别</title>
+	<style>
+		html {
+			height: 100%;
+			background-color: rgb(207, 252, 213);}
+		
+		h1 {
+			position: absolute;
+			text-align: center;
+			left:0;
+			right:0;
+			font-family: 'STKaiti';
+			color: #248ab3;
+			font-size: 250%;
+			font-weight: 300;
+			z-index: -1;
+		}
+		
+		h5 {
+			position: absolute;
+			text-align: center;
+			left:0;
+			right:0;
+			font-family: 'Sans-serif';
+			color: #807F7D;
+			font-size: 100%;
+			font-weight: 100;
+			z-index: 1;
+		}
+		
+		#canvas {
+			position: relative;
+			border: 8px solid;
+			margin: auto;
+			margin-top: 160px;
+			border-radius: 5px;
+			cursor: pointer;
+			text-align: center;
+		}
+		
+		.centered {
+			position: relative;
+			text-align: center;
+		}
+		</style>
+</head>
+
+<body>
+		<h1>手写数字识别</h1>
+		
+		<div class="centered">
+			<canvas id="canvas" width="128" height="128"></canvas>
+		</div>
+		<h5>Made By XuHua</h5>
+		<div class="centered">
+			<input type="button" class="myButton" value="预测" style="">
+			<input type="button" id="clearButton" value="清除" style="">
+		</div>
+
+		<div class="centered">
+			<h1 id="result"></h1>
+		</div>
+
+
+  		<script src="{{url_for('static',filename='jquery-3.2.0.min.js')}}"></script>
+	    <script src="{{url_for('static',filename='index.js')}}"></script>
+	    <script type="text/javascript">
+	   		$(".myButton").click(function(){
+	   			$('#result').text('预测中...');
+	   			var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+	   			var canvasObj = document.getElementById("canvas");
+	   			var img = canvasObj.toDataURL('image/png');
+	   			$.ajax({
+	   				type: "POST",
+	   				url: $SCRIPT_ROOT + "/predict/",
+	   				data: img,
+	   				success: function(data){
+	   					$('#result').text('预测 结果: ' + data);
+	   				}
+	   			});
+	   		});
+	   </script>
+</body>
+</html>
